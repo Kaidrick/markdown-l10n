@@ -34,7 +34,15 @@
 
       <v-col cols="4">
         <v-card elevation="2" class="pa-3 fill-height">
-          <v-btn @click="handleGeneratePo">SEND TO TRANSLATION</v-btn>
+          <v-row>
+            <v-btn @click="handleFormatClean">FORMAT</v-btn>
+            <v-checkbox label="half-width punctuation" v-model="formatHalfWidthPunctuation"></v-checkbox>
+            <v-checkbox label="trim excessive space" v-model="trimExcessiveSpaces"></v-checkbox>
+          </v-row>
+
+          <v-row>
+            <v-btn @click="handleGeneratePo">SEND TO TRANSLATION</v-btn>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -45,11 +53,11 @@
         </v-card>
       </v-col>
     </v-row>
-<!--    <v-row class="shrink flex-0-0">-->
-<!--      <v-col cols="12">-->
-<!--        -->
-<!--      </v-col>-->
-<!--    </v-row>-->
+    <!--    <v-row class="shrink flex-0-0">-->
+    <!--      <v-col cols="12">-->
+    <!--        -->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
   </v-main>
 </template>
 
@@ -70,6 +78,9 @@ const editorWrapper = ref(null)
 
 const fileErrorText = ref('')
 const fileErrorOpen = ref(false)
+
+const formatHalfWidthPunctuation = ref(true)
+const trimExcessiveSpaces = ref(true)
 
 const fileRules = ref([
   value => {
@@ -166,6 +177,31 @@ function handleGeneratePo() {
     router.push({ name: 'translate' })
   })
 }
+
+/**
+ * Suppose that every line can have 0+ line separator
+ * remove all \n that is not immediately followed by a \n
+ */
+function handleFormatClean() {
+  // modify editor content directly
+  const data = store.mainEditor.getValue()
+
+  // for each line, find next line? if next line is \n?
+  let prep = data.replaceAll(/(\S)\n([^\n])/mg, '$1 $2')
+
+  if (formatHalfWidthPunctuation.value) {
+    // ， ’ ‘ ” “
+    prep = prep.replaceAll('‘', '\'')
+        .replaceAll('’', '\'')
+        .replaceAll('”', '\"')
+        .replaceAll('“', '\"')
+        .replaceAll('，', ', ')
+        .replaceAll('。', '. ')
+  }
+
+  store.mainEditor.setValue(prep)
+}
+
 
 onMounted(() => {
   const editorCalcHeight = editorWrapper.value.$el.getBoundingClientRect().height - 12 * 2
