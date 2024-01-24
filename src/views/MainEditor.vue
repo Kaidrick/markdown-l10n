@@ -48,7 +48,7 @@
     </v-row>
     <v-row class="grow">
       <v-col cols="12">
-        <v-card ref="editorWrapper" elevation="2" class="pa-3 fill-height flex-0-0">
+        <v-card ref="editorWrapper" elevation="2" class="pa-3 fill-height flex-0-0 overflow-visible">
           <div id="vditor"></div>
         </v-card>
       </v-col>
