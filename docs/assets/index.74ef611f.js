@@ -1,1 +1,0 @@
-function d(t,n,o="text/plain"){const e=document.createElement("a");e.setAttribute("href",`data:${o};charset=utf-8,`+encodeURIComponent(n)),e.setAttribute("download",t),e.style.display="none",document.body.appendChild(e),e.click(),document.body.removeChild(e)}export{d};
