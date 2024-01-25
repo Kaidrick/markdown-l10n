@@ -186,8 +186,9 @@ function handleFormatClean() {
   // modify editor content directly
   const data = store.mainEditor.getValue()
 
-  // for each line, find next line? if next line is \n?
-  let prep = data.replaceAll(/(\S)\n([^\n])/mg, '$1 $2')
+  // line ends with a \n, and the next line does not start with a special character
+  // TODO: english alphabet and digits only?
+  let prep = data.replaceAll(/(\S)\n([^\n|#`_*])/mg, '$1 $2')
 
   if (formatHalfWidthPunctuation.value) {
     // ， ’ ‘ ” “
